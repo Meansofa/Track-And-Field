@@ -1,0 +1,54 @@
+[gd_scene load_steps=5 format=3 uid="uid://x423dqkeuj5f"]
+
+[ext_resource type="Texture2D" uid="uid://c0cp4m38ax78j" path="res://Art/Maps/Dungeon Tile Set.png" id="1_vwonl"]
+
+[sub_resource type="GDScript" id="GDScript_vwonl"]
+resource_name = "Box"
+script/source = "extends Area2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+
+
+func _on_body_entered(body: Node2D) -> void:
+	if body.is_in_group(\"Player\"):
+		body.velocity = Vector2.ZERO
+		body.trip()
+		$Box.queue_free()
+		$CollisionShape2D.queue_free()
+"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eic30"]
+atlas = ExtResource("1_vwonl")
+region = Rect2(160, 160, 16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iy76c"]
+size = Vector2(14, 14)
+
+[node name="Box" type="Area2D"]
+script = SubResource("GDScript_vwonl")
+
+[node name="Box_Top" type="Sprite2D" parent="."]
+position = Vector2(0, 6)
+scale = Vector2(1, 0.1875)
+texture = SubResource("AtlasTexture_eic30")
+
+[node name="Box" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_eic30")
+
+[node name="Box_Top" type="Sprite2D" parent="Box"]
+position = Vector2(0, -6)
+scale = Vector2(1, 0.1875)
+texture = SubResource("AtlasTexture_eic30")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_iy76c")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
