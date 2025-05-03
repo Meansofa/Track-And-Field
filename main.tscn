@@ -3,15 +3,15 @@
 [ext_resource type="PackedScene" uid="uid://cl2u8atyqhb23" path="res://player.tscn" id="1_efxa6"]
 [ext_resource type="Texture2D" uid="uid://c0cp4m38ax78j" path="res://Art/Maps/Dungeon Tile Set.png" id="1_lquwl"]
 [ext_resource type="PackedScene" uid="uid://x423dqkeuj5f" path="res://Objects/box.tscn" id="7_5vw27"]
-[ext_resource type="Texture2D" uid="uid://c4k5nip5kcjt8" path="res://Art/Parallax/1.png" id="10_w48qg"]
+[ext_resource type="Texture2D" uid="uid://c4k5nip5kcjt8" path="res://Art/Parallax/Dessert/1.png" id="10_w48qg"]
 [ext_resource type="Script" uid="uid://bv4tuydalqddm" path="res://game_modes.gd" id="11_efxa6"]
-[ext_resource type="Texture2D" uid="uid://b81l8487higa" path="res://Art/Parallax/2.png" id="11_vivmo"]
+[ext_resource type="Texture2D" uid="uid://b81l8487higa" path="res://Art/Parallax/Dessert/2.png" id="11_vivmo"]
 [ext_resource type="Script" uid="uid://cprv6mt8nbod" path="res://Themes/RichTextEffects/colormod.gd" id="11_w48qg"]
-[ext_resource type="Texture2D" uid="uid://cl5sxqht4c8d1" path="res://Art/Parallax/3.png" id="12_2cqfq"]
+[ext_resource type="Texture2D" uid="uid://cl5sxqht4c8d1" path="res://Art/Parallax/Dessert/3.png" id="12_2cqfq"]
 [ext_resource type="Script" uid="uid://b4gou62q8xvu4" path="res://Themes/RichTextEffects/heart.gd" id="12_vivmo"]
 [ext_resource type="Script" uid="uid://dbqffhoplkjf1" path="res://Themes/RichTextEffects/nervous.gd" id="13_2cqfq"]
-[ext_resource type="Texture2D" uid="uid://1612esgnvlpj" path="res://Art/Parallax/4.png" id="13_yaehf"]
-[ext_resource type="Texture2D" uid="uid://mlqe1a1xbkb2" path="res://Art/Parallax/5.png" id="14_074og"]
+[ext_resource type="Texture2D" uid="uid://1612esgnvlpj" path="res://Art/Parallax/Dessert/4.png" id="13_yaehf"]
+[ext_resource type="Texture2D" uid="uid://mlqe1a1xbkb2" path="res://Art/Parallax/Dessert/5.png" id="14_074og"]
 [ext_resource type="Theme" uid="uid://1m3sg8iy6q2l" path="res://Themes/NES.tres" id="14_w48qg"]
 [ext_resource type="Script" uid="uid://8vf5cs5xuda0" path="res://Control Panel.gd" id="15_vivmo"]
 
@@ -441,6 +441,7 @@ alignment = 0
 
 [node name="Scene Transition" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
+visible = false
 script = SubResource("GDScript_w48qg")
 
 [node name="TextureRect" type="TextureRect" parent="Scene Transition"]
@@ -453,5 +454,6 @@ texture = SubResource("GradientTexture2D_vivmo")
 
 [connection signal="pressed" from="UI/Control Panel/Main Menu/Player Count/VBoxContainer/1 Player" to="UI/Control Panel" method="_on__player_pressed"]
 [connection signal="pressed" from="UI/Control Panel/Game Modes/VBoxContainer/100-Meter Dash" to="UI/Control Panel/Game Modes" method="_on_meter_dash_pressed"]
+[connection signal="pressed" from="UI/Control Panel/Game Modes/VBoxContainer/110-Meter Hurdles" to="UI/Control Panel/Game Modes" method="_on_meter_hurdles_pressed"]
 
 [editable path="Player"]

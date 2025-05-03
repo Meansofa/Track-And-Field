@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c4k5nip5kcjt8"
-path="res://.godot/imported/1.png-9c8a45ff1f7ec8614ff4d4ea5bf421a0.ctex"
+uid="uid://b6ymlwf3nf67u"
+path="res://.godot/imported/1.png-3f644bf6c18123e983707a069217ab05.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/Parallax/1.png"
-dest_files=["res://.godot/imported/1.png-9c8a45ff1f7ec8614ff4d4ea5bf421a0.ctex"]
+source_file="res://Art/Parallax/Cave/1.png"
+dest_files=["res://.godot/imported/1.png-3f644bf6c18123e983707a069217ab05.ctex"]
 
 [params]
 

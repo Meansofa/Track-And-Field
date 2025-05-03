@@ -43,7 +43,7 @@ func _physics_process(delta: float) -> void:
 
 func change_animation():
 	if is_on_floor():
-		if Input.is_action_just_pressed("ui_accept"):
+		if Input.is_action_just_pressed("ui_accept") and can_jump:
 			player_animation.play("roll")
 			player_animation.speed_scale = 1
 		else:
