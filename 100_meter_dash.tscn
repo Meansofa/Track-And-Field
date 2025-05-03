@@ -189,11 +189,9 @@ label_settings = SubResource("LabelSettings_5wo3x")
 
 [node name="Player" parent="." instance=ExtResource("3_veerm")]
 position = Vector2(40, 254)
+can_jump = false
 
 [node name="Camera2D" parent="Player" index="2"]
 limit_right = 2800
-
-[connection signal="body_entered" from="Ground/Goal" to="Ground/Goal" method="_on_body_entered"]
-[connection signal="body_entered" from="Ground/@Area2D@51200" to="Ground/@Area2D@51200" method="_on_body_entered"]
 
 [editable path="Player"]

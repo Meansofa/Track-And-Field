@@ -6,7 +6,12 @@ extends CharacterBody2D
 @export var FRICTION = 80.0 #how fast the velocity decreases to 0 
 @export var JUMP_VELOCITY = -250.0
 
+@export var can_run : bool = true
+@export var can_jump : bool = true
+
+
 @export var player_animation : AnimatedSprite2D
+
 
 var game_start : bool
 
@@ -21,12 +26,12 @@ func _physics_process(delta: float) -> void:
 		velocity += get_gravity() * delta
 
 	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+	if Input.is_action_just_pressed("ui_accept") and is_on_floor() and can_jump:
 		velocity.y = JUMP_VELOCITY
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
-	if is_on_floor():
+	if is_on_floor() and can_run:
 		if Input.is_action_just_pressed("ui_left") or Input.is_action_just_pressed("ui_right"):
 			velocity.x = move_toward(velocity.x, MAXIMUM_SPEED * 1, ACCELERATION * delta)
 		else:

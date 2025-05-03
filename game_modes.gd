@@ -12,4 +12,6 @@ func _process(delta: float) -> void:
 
 
 func _on_meter_dash_pressed() -> void:
+	%"Scene Transition".visible = true
+	await get_tree().create_timer(0.1).timeout
 	get_tree().change_scene_to_file("res://100_meter_dash.tscn")

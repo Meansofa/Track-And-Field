@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=4 uid="uid://ccqkiv6njiapm"]
+[gd_scene load_steps=26 format=4 uid="uid://ccqkiv6njiapm"]
 
 [ext_resource type="PackedScene" uid="uid://cl2u8atyqhb23" path="res://player.tscn" id="1_efxa6"]
 [ext_resource type="Texture2D" uid="uid://c0cp4m38ax78j" path="res://Art/Maps/Dungeon Tile Set.png" id="1_lquwl"]
@@ -6,7 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://c4k5nip5kcjt8" path="res://Art/Parallax/1.png" id="10_w48qg"]
 [ext_resource type="Script" uid="uid://bv4tuydalqddm" path="res://game_modes.gd" id="11_efxa6"]
 [ext_resource type="Texture2D" uid="uid://b81l8487higa" path="res://Art/Parallax/2.png" id="11_vivmo"]
+[ext_resource type="Script" uid="uid://cprv6mt8nbod" path="res://Themes/RichTextEffects/colormod.gd" id="11_w48qg"]
 [ext_resource type="Texture2D" uid="uid://cl5sxqht4c8d1" path="res://Art/Parallax/3.png" id="12_2cqfq"]
+[ext_resource type="Script" uid="uid://b4gou62q8xvu4" path="res://Themes/RichTextEffects/heart.gd" id="12_vivmo"]
+[ext_resource type="Script" uid="uid://dbqffhoplkjf1" path="res://Themes/RichTextEffects/nervous.gd" id="13_2cqfq"]
 [ext_resource type="Texture2D" uid="uid://1612esgnvlpj" path="res://Art/Parallax/4.png" id="13_yaehf"]
 [ext_resource type="Texture2D" uid="uid://mlqe1a1xbkb2" path="res://Art/Parallax/5.png" id="14_074og"]
 [ext_resource type="Theme" uid="uid://1m3sg8iy6q2l" path="res://Themes/NES.tres" id="14_w48qg"]
@@ -17,8 +20,10 @@ resource_name = "Title_Screen_Player"
 script/source = "extends CharacterBody2D
 #not the actual player script, check player.gd for the actual player script used in gamemodes
 
-const SPEED = 100.0
-const JUMP_VELOCITY = -400.0
+@export var MAXIMUM_SPEED = 500.0
+@export var ACCELERATION = 1500.0 #how fast the velocity increases to maximum speed 
+@export var FRICTION = 80.0 #how fast the velocity decreases to 0 
+@export var JUMP_VELOCITY = -250.0
 
 @export var player_animation : AnimatedSprite2D
 
@@ -30,8 +35,13 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	velocity.x = 1 * SPEED
 	player_animation.speed_scale = velocity.x / 100 + 1
+	
+	if is_on_floor():
+		if Input.is_action_just_pressed(\"ui_left\") or Input.is_action_just_pressed(\"ui_right\"):
+			velocity.x = move_toward(velocity.x, MAXIMUM_SPEED * 1, ACCELERATION * delta)
+		else:
+			velocity.x = move_toward(velocity.x, 100, FRICTION * delta)
 
 	move_and_slide()
 "
@@ -196,18 +206,42 @@ sources/1 = SubResource("TileSetScenesCollectionSource_2cqfq")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_efxa6"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_vivmo"]
-font_size = 24
-font_color = Color(1, 0.54902, 0, 1)
+[sub_resource type="RichTextEffect" id="RichTextEffect_yaehf"]
+script = ExtResource("11_w48qg")
+metadata/_custom_type_script = "uid://cprv6mt8nbod"
 
-[sub_resource type="LabelSettings" id="LabelSettings_dg77c"]
-font_color = Color(0.627451, 0.203922, 0.203922, 1)
+[sub_resource type="RichTextEffect" id="RichTextEffect_074og"]
+script = ExtResource("12_vivmo")
+metadata/_custom_type_script = "uid://b4gou62q8xvu4"
+
+[sub_resource type="RichTextEffect" id="RichTextEffect_cegan"]
+script = ExtResource("13_2cqfq")
+metadata/_custom_type_script = "uid://dbqffhoplkjf1"
+
+[sub_resource type="GDScript" id="GDScript_w48qg"]
+resource_name = "Scene Transition"
+script/source = "extends CanvasLayer
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	self.visible = false
+"
+
+[sub_resource type="Gradient" id="Gradient_w48qg"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_vivmo"]
+gradient = SubResource("Gradient_w48qg")
 
 [node name="Main" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_efxa6")]
 position = Vector2(256, 309)
 script = SubResource("GDScript_efxa6")
+ACCELERATION = 1500.0
+JUMP_VELOCITY = -400.0
 
 [node name="EndlessRunner" type="Parallax2D" parent="."]
 scroll_offset = Vector2(-1400, 0)
@@ -332,28 +366,17 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_efxa6")
 
-[node name="Title" type="Label" parent="UI/Control Panel/Main Menu"]
+[node name="Title" type="RichTextLabel" parent="UI/Control Panel/Main Menu"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
-text = "Track and Field
+bbcode_enabled = true
+text = "[center][heart][i][b]Track and Field[/b]
+[color=#F6856E]in Medieval Era
 "
-label_settings = SubResource("LabelSettings_vivmo")
-
-[node name="Header" type="Label" parent="UI/Control Panel/Main Menu/Title"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -98.0
-offset_right = 98.0
-offset_bottom = 69.0
-grow_horizontal = 2
-size_flags_horizontal = 4
-size_flags_vertical = 0
-text = "
-in Medieval Era"
-label_settings = SubResource("LabelSettings_dg77c")
+fit_content = true
+autowrap_mode = 0
+custom_effects = [SubResource("RichTextEffect_yaehf"), SubResource("RichTextEffect_074og"), SubResource("RichTextEffect_cegan")]
 
 [node name="Player Count" type="PanelContainer" parent="UI/Control Panel/Main Menu"]
 layout_mode = 2
@@ -415,6 +438,18 @@ layout_mode = 2
 text = "6. Triple Jump
 "
 alignment = 0
+
+[node name="Scene Transition" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+script = SubResource("GDScript_w48qg")
+
+[node name="TextureRect" type="TextureRect" parent="Scene Transition"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_vivmo")
 
 [connection signal="pressed" from="UI/Control Panel/Main Menu/Player Count/VBoxContainer/1 Player" to="UI/Control Panel" method="_on__player_pressed"]
 [connection signal="pressed" from="UI/Control Panel/Game Modes/VBoxContainer/100-Meter Dash" to="UI/Control Panel/Game Modes" method="_on_meter_dash_pressed"]
