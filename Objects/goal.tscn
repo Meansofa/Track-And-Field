@@ -1,0 +1,56 @@
+[gd_scene load_steps=7 format=3 uid="uid://btvtilt6pyxqq"]
+
+[ext_resource type="Texture2D" uid="uid://c0cp4m38ax78j" path="res://Art/Maps/Dungeon Tile Set.png" id="1_bhrk7"]
+
+[sub_resource type="GDScript" id="GDScript_kyyj3"]
+resource_name = "Goal"
+script/source = "extends Area2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	$OpenedChest.visible = false
+	$ClosedChest.visible = true
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+
+
+func _on_body_entered(body: Node2D) -> void:
+	print(self.name, \">body\")
+	if body.is_in_group(\"Player\"):
+		$OpenedChest.visible = true
+		print(self.name, \">Player Win\")
+		body.win()
+		
+"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3j5ms"]
+atlas = ExtResource("1_bhrk7")
+region = Rect2(192, 144, 16, 16)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_lrm46"]
+load_path = "res://.godot/imported/Dungeon Tile Set.png-57a0e8bc69c1530f432f3a4994b46c12.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vsvlu"]
+atlas = SubResource("CompressedTexture2D_lrm46")
+region = Rect2(208, 144, 16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fp4f1"]
+
+[node name="Goal" type="Area2D"]
+script = SubResource("GDScript_kyyj3")
+
+[node name="ClosedChest" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_3j5ms")
+
+[node name="OpenedChest" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("AtlasTexture_vsvlu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_fp4f1")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

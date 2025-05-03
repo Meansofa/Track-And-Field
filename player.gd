@@ -8,9 +8,14 @@ extends CharacterBody2D
 
 @export var player_animation : AnimatedSprite2D
 
-var just_jumped : bool
+var game_start : bool
+
+func _ready() -> void:
+	game_start = true
 
 func _physics_process(delta: float) -> void:
+	if not game_start:
+		return
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -27,7 +32,6 @@ func _physics_process(delta: float) -> void:
 		else:
 			velocity.x = move_toward(velocity.x, 0, FRICTION * delta)
 		
-		print(velocity.x)
 	
 	change_animation()
 	move_and_slide()
@@ -38,7 +42,7 @@ func change_animation():
 			player_animation.play("roll")
 			player_animation.speed_scale = 1
 		else:
-			if (player_animation.animation == "roll" or player_animation.animation == "trip")  and  player_animation.is_playing():
+			if (player_animation.animation == "roll" or player_animation.animation == "trip" or player_animation.animation == "win")  and  player_animation.is_playing():
 				return
 			if velocity.x > 0:
 				player_animation.play("running")
@@ -48,3 +52,13 @@ func change_animation():
 
 func trip():
 	player_animation.play("trip")
+	player_animation.speed_scale = 1
+
+func win():
+	await get_tree().create_timer(0.5).timeout
+	player_animation.play("win")
+	velocity.x = 0
+	await player_animation.animation_finished
+	game_start = false
+	player_animation.play("default")
+	player_animation.flip_h = true

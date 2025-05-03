@@ -1,0 +1,10 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://1m3sg8iy6q2l"]
+
+[ext_resource type="FontFile" uid="uid://ckrufofluswln" path="res://Themes/TextFonts/TypefaceMarioWorldPixelFilledRegular-Yz84q.otf" id="1_q7dtq"]
+[ext_resource type="FontFile" uid="uid://c3q46fx5i44qt" path="res://Themes/TextFonts/nintendo-nes-font.otf" id="1_tjbs6"]
+
+[resource]
+Button/fonts/font = ExtResource("1_q7dtq")
+Label/fonts/font = ExtResource("1_q7dtq")
+RichTextLabel/font_sizes/normal_font_size = 32
+RichTextLabel/fonts/normal_font = ExtResource("1_tjbs6")
