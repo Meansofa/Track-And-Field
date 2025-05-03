@@ -14,16 +14,29 @@ extends CharacterBody2D
 
 
 var game_start : bool
+var game_ended : bool
+var is_starting : bool #when the _start() function is already running
 
-func _ready() -> void:
+func _start():
+	player_animation.play("default")
+	await get_tree().create_timer(6).timeout
+	player_animation.play("start")
+	await  player_animation.animation_finished
 	game_start = true
 
 func _physics_process(delta: float) -> void:
-	if not game_start:
-		return
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
+
+	if not game_start:
+		move_and_slide() #to drop the player to the floor incase they're floating
+		if not is_starting:
+			is_starting = true
+			_start()
+		return
+	elif game_ended:
+		return
 
 	# Handle jump.
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor() and can_jump:
@@ -64,6 +77,15 @@ func win():
 	player_animation.play("win")
 	velocity.x = 0
 	await player_animation.animation_finished
-	game_start = false
+	game_ended = true
 	player_animation.play("default")
 	player_animation.flip_h = true
+	_go_back_to_Main()
+
+func _go_back_to_Main():
+	await  get_tree().create_timer(3).timeout
+	get_tree().change_scene_to_file("res://main.tscn")
+
+
+func _on_animated_sprite_2d_frame_changed() -> void:
+	pass # Replace with function body.

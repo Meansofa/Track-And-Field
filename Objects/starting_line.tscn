@@ -1,0 +1,60 @@
+[gd_scene load_steps=7 format=3 uid="uid://doir5j2am2vb2"]
+
+[ext_resource type="Texture2D" uid="uid://c0cp4m38ax78j" path="res://Art/Maps/Dungeon Tile Set.png" id="1_gtuns"]
+[ext_resource type="Theme" uid="uid://1m3sg8iy6q2l" path="res://Themes/NES.tres" id="2_bfwyj"]
+[ext_resource type="Script" uid="uid://yry8dl416l7v" path="res://Themes/RichTextEffects/jump.gd" id="3_34ak1"]
+
+[sub_resource type="GDScript" id="GDScript_7mlir"]
+resource_name = "Starting Line"
+script/source = "extends Node2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	$RichTextLabel.visible = false
+	_start()
+
+func _start():
+	await get_tree().create_timer(6).timeout
+	_start_count()
+
+func _start_count():
+	$RichTextLabel.visible = true
+	$RichTextLabel.text = \"[center][jump]3\"
+	await get_tree().create_timer(1.5).timeout
+	$RichTextLabel.text = \"[center][jump]2\"
+	await get_tree().create_timer(1.5).timeout
+	$RichTextLabel.text = \"[center][jump]1\"
+	await get_tree().create_timer(1.5).timeout
+	$RichTextLabel.text = \"[center][jump]Go!\"
+"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wly8a"]
+atlas = ExtResource("1_gtuns")
+region = Rect2(113, 161, 15, 15)
+
+[sub_resource type="RichTextEffect" id="RichTextEffect_subc1"]
+script = ExtResource("3_34ak1")
+metadata/_custom_type_script = "uid://yry8dl416l7v"
+
+[node name="Starting Line" type="Node2D"]
+script = SubResource("GDScript_7mlir")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_wly8a")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -36.0
+offset_top = -52.0
+offset_right = 37.0
+offset_bottom = -12.0
+grow_horizontal = 2
+size_flags_vertical = 4
+theme = ExtResource("2_bfwyj")
+bbcode_enabled = true
+text = "[center][jump]3"
+fit_content = true
+custom_effects = [SubResource("RichTextEffect_subc1")]

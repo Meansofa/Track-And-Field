@@ -1,10 +1,12 @@
-[gd_scene load_steps=26 format=4 uid="uid://ccqkiv6njiapm"]
+[gd_scene load_steps=30 format=4 uid="uid://ccqkiv6njiapm"]
 
+[ext_resource type="Script" uid="uid://b0nwc6cp8arw0" path="res://main.gd" id="1_2cqfq"]
 [ext_resource type="PackedScene" uid="uid://cl2u8atyqhb23" path="res://player.tscn" id="1_efxa6"]
 [ext_resource type="Texture2D" uid="uid://c0cp4m38ax78j" path="res://Art/Maps/Dungeon Tile Set.png" id="1_lquwl"]
+[ext_resource type="AudioStream" uid="uid://b3ws2mejysb7w" path="res://Music/1 - Track 1.mp3" id="2_yaehf"]
 [ext_resource type="PackedScene" uid="uid://x423dqkeuj5f" path="res://Objects/box.tscn" id="7_5vw27"]
 [ext_resource type="Texture2D" uid="uid://c4k5nip5kcjt8" path="res://Art/Parallax/Dessert/1.png" id="10_w48qg"]
-[ext_resource type="Script" uid="uid://bv4tuydalqddm" path="res://game_modes.gd" id="11_efxa6"]
+[ext_resource type="Script" uid="uid://bv4tuydalqddm" path="res://Scripts/game_modes.gd" id="11_efxa6"]
 [ext_resource type="Texture2D" uid="uid://b81l8487higa" path="res://Art/Parallax/Dessert/2.png" id="11_vivmo"]
 [ext_resource type="Script" uid="uid://cprv6mt8nbod" path="res://Themes/RichTextEffects/colormod.gd" id="11_w48qg"]
 [ext_resource type="Texture2D" uid="uid://cl5sxqht4c8d1" path="res://Art/Parallax/Dessert/3.png" id="12_2cqfq"]
@@ -13,7 +15,8 @@
 [ext_resource type="Texture2D" uid="uid://1612esgnvlpj" path="res://Art/Parallax/Dessert/4.png" id="13_yaehf"]
 [ext_resource type="Texture2D" uid="uid://mlqe1a1xbkb2" path="res://Art/Parallax/Dessert/5.png" id="14_074og"]
 [ext_resource type="Theme" uid="uid://1m3sg8iy6q2l" path="res://Themes/NES.tres" id="14_w48qg"]
-[ext_resource type="Script" uid="uid://8vf5cs5xuda0" path="res://Control Panel.gd" id="15_vivmo"]
+[ext_resource type="Script" uid="uid://8vf5cs5xuda0" path="res://Scripts/Control Panel.gd" id="15_vivmo"]
+[ext_resource type="AudioStream" uid="uid://dtnf7jotjqg2g" path="res://Music/NES click.mp3" id="17_yaehf"]
 
 [sub_resource type="GDScript" id="GDScript_efxa6"]
 resource_name = "Title_Screen_Player"
@@ -218,6 +221,22 @@ metadata/_custom_type_script = "uid://b4gou62q8xvu4"
 script = ExtResource("13_2cqfq")
 metadata/_custom_type_script = "uid://dbqffhoplkjf1"
 
+[sub_resource type="GDScript" id="GDScript_yaehf"]
+resource_name = "player_count"
+script/source = "extends PanelContainer
+
+@export var button_click : AudioStream
+
+func _play_click_sound():
+	var audio_player = AudioPlayerFunctions.new()
+	add_child(audio_player)
+	audio_player.play_sound(button_click)
+
+
+func _on__player_pressed() -> void:
+	_play_click_sound()
+"
+
 [sub_resource type="GDScript" id="GDScript_w48qg"]
 resource_name = "Scene Transition"
 script/source = "extends CanvasLayer
@@ -236,6 +255,8 @@ colors = PackedColorArray(0, 0, 0, 1)
 gradient = SubResource("Gradient_w48qg")
 
 [node name="Main" type="Node2D"]
+script = ExtResource("1_2cqfq")
+background_music = ExtResource("2_yaehf")
 
 [node name="Player" parent="." instance=ExtResource("1_efxa6")]
 position = Vector2(256, 309)
@@ -382,6 +403,8 @@ custom_effects = [SubResource("RichTextEffect_yaehf"), SubResource("RichTextEffe
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+script = SubResource("GDScript_yaehf")
+button_click = ExtResource("17_yaehf")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/Control Panel/Main Menu/Player Count"]
 layout_mode = 2
@@ -404,6 +427,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("11_efxa6")
+button_click = ExtResource("17_yaehf")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/Control Panel/Game Modes"]
 layout_mode = 2
@@ -453,6 +477,7 @@ grow_vertical = 2
 texture = SubResource("GradientTexture2D_vivmo")
 
 [connection signal="pressed" from="UI/Control Panel/Main Menu/Player Count/VBoxContainer/1 Player" to="UI/Control Panel" method="_on__player_pressed"]
+[connection signal="pressed" from="UI/Control Panel/Main Menu/Player Count/VBoxContainer/1 Player" to="UI/Control Panel/Main Menu/Player Count" method="_on__player_pressed"]
 [connection signal="pressed" from="UI/Control Panel/Game Modes/VBoxContainer/100-Meter Dash" to="UI/Control Panel/Game Modes" method="_on_meter_dash_pressed"]
 [connection signal="pressed" from="UI/Control Panel/Game Modes/VBoxContainer/110-Meter Hurdles" to="UI/Control Panel/Game Modes" method="_on_meter_hurdles_pressed"]
 

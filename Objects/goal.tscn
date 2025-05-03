@@ -1,6 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://btvtilt6pyxqq"]
+[gd_scene load_steps=10 format=3 uid="uid://btvtilt6pyxqq"]
 
 [ext_resource type="Texture2D" uid="uid://c0cp4m38ax78j" path="res://Art/Maps/Dungeon Tile Set.png" id="1_bhrk7"]
+[ext_resource type="Theme" uid="uid://1m3sg8iy6q2l" path="res://Themes/NES.tres" id="2_3j5ms"]
+[ext_resource type="Script" uid="uid://yry8dl416l7v" path="res://Themes/RichTextEffects/jump.gd" id="3_lrm46"]
 
 [sub_resource type="GDScript" id="GDScript_kyyj3"]
 resource_name = "Goal"
@@ -10,7 +12,9 @@ script/source = "extends Area2D
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$OpenedChest.visible = false
+	$RichTextLabel.visible = false
 	$ClosedChest.visible = true
+	
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -22,6 +26,7 @@ func _on_body_entered(body: Node2D) -> void:
 	print(self.name, \">body\")
 	if body.is_in_group(\"Player\"):
 		$OpenedChest.visible = true
+		$RichTextLabel.visible = true
 		print(self.name, \">Player Win\")
 		body.win()
 		
@@ -39,6 +44,11 @@ atlas = SubResource("CompressedTexture2D_lrm46")
 region = Rect2(208, 144, 16, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fp4f1"]
+size = Vector2(20, 73)
+
+[sub_resource type="RichTextEffect" id="RichTextEffect_vsvlu"]
+script = ExtResource("3_lrm46")
+metadata/_custom_type_script = "uid://yry8dl416l7v"
 
 [node name="Goal" type="Area2D"]
 script = SubResource("GDScript_kyyj3")
@@ -51,6 +61,19 @@ visible = false
 texture = SubResource("AtlasTexture_vsvlu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -26.5)
 shape = SubResource("RectangleShape2D_fp4f1")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+visible = false
+offset_left = 11.0
+offset_top = -89.0
+offset_right = 128.0
+offset_bottom = -49.0
+theme = ExtResource("2_3j5ms")
+bbcode_enabled = true
+text = "[center][jump]Finished!!"
+fit_content = true
+custom_effects = [SubResource("RichTextEffect_vsvlu")]
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
